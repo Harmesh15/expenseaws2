@@ -220,7 +220,7 @@ window.addEventListener("DOMContentLoaded", () => {
 DownloadExpenses.addEventListener('click', async () => {
   console.log("DownloadReport fun hit in js 201")
   const token = localStorage.getItem("token");
-  console.log(token);
+
   try {
     const response = await axios.get("http://localhost:8000/expense/download",
       {
@@ -230,6 +230,7 @@ DownloadExpenses.addEventListener('click', async () => {
       },
     );
 
+    console.log(response);
     const Data = response.data.contentReponse;
     console.log(Data);
     showContentUrl(Data);

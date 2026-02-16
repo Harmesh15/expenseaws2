@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.990.0",
     "@cashfreepayments/cashfree-js": "^1.0.5",
     "@google/genai": "^1.38.0",
     "aws-sdk": "^2.1693.0",

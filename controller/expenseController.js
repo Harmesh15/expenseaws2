@@ -240,15 +240,54 @@ const getAllExpenseForReport = async (req, res) => {
 
 
 
+// const downloadExpenses = async (req, res) => {
+//   try {
+
+//     console.log("controller hit in download report");
+//     const response = await Expense.findAll({ where: { userId: req.user.userId } });
+
+//     const stringifiedExpense = JSON.stringify(response);
+//     const fileName = `Expense${req.user.userId}.txt`;
+//     const fileUrl = await S3services.uploadToS3(stringifiedExpense, fileName);
+
+//     await content.create({
+//       ContentUrl: fileUrl,
+//       userId: req.user.userId
+//     });
+
+//     const contentReponse = await content.findAll({ where: { userId: req.user.userId } });
+//     res.status(200).json({ contentReponse });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+
+
+
+
+
 const downloadExpenses = async (req, res) => {
   try {
 
-    console.log("controller hit in download report");
-    const response = await Expense.findAll({ where: { userId: req.user.userId } });
+    console.log("Controller hit: download report");
 
-    const stringifiedExpense = JSON.stringify(response);
-    const fileName = `Expense${req.user.userId}.txt`;
-    const fileUrl = await S3services.uploadToS3(stringifiedExpense, fileName);
+    const expenses = await Expense.findAll({
+      where: { userId: req.user.userId }
+    });
+
+    if (!expenses || expenses.length === 0) {
+      return res.status(404).json({ message: "No expenses found" });
+    }
+
+    const stringifiedExpense = JSON.stringify(expenses, null, 2);
+
+    const fileName = `expenses/user-${req.user.userId}/${Date.now()}.json`;
+    const fileUrl = await S3services.uploadToS3(
+      stringifiedExpense,
+      fileName,
+      "application/json"
+    );
 
     await content.create({
       ContentUrl: fileUrl,
@@ -257,10 +296,13 @@ const downloadExpenses = async (req, res) => {
 
     const contentReponse = await content.findAll({ where: { userId: req.user.userId } });
     res.status(200).json({ contentReponse });
+
   } catch (error) {
-    console.log(error);
+    console.error("Download Expense Error:", error);
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
+
 
 module.exports = {
   addExpense,
