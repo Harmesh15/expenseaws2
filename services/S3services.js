@@ -61,13 +61,6 @@ const uploadToS3 = async (data, fileName, contentType = "application/octet-strea
         };
 
 
-        // const params = {
-        //     Bucket: process.env.BUCKET_NAME,
-        //     Key: fileName,
-        //     Body: data,
-        //     ContentType: contentType,
-        // };
-
         await s3Client.send(new PutObjectCommand(params));
 
         const fileUrl = `https://${process.env.BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;

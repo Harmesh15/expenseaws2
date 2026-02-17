@@ -4,50 +4,21 @@ const email = document.querySelector("#email");
 const password = document.querySelector("#password");
 
 form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  try {
-    let object = {
-      name: username.value,
-      email: email.value,
-      password: password.value,
-    };
-    const res = await axios.post("http://localhost:8000/user/signup", object);
-    form.reset();
-    alert("You register successfully");
-    window.location.href = "../login/login.html"
-    console.log(res.data);
-  } catch (error) {
-    console.log(error.res?.data || error.message);
-  }
-});
+    e.preventDefault();
+    try {
+        let object = {
+            name: username.value,
+            email: email.value,
+            password: password.value
+        }
+        const res = await axios.post("http://localhost:8000/user/signup", object);
+        alert("You register successfully");
+        window.location.href = "../login/login.html"
+        form.reset();
+        console.log(res.data);
+    } catch (error) {
+        console.log(error.message);
+    }
+})
 
-// const updateExpense = async (req,res)=>{
-//    const token = localStorage.getItem("token");
-//      try{
 
-//       const response = await axios.put(`http://localhost:8000/expense/update/${id}`,{
-//          amount: amount.value,
-//          category: category.value,
-//          description: description.value
-//       },
-//        {
-//             headers: {
-//                authorization: `Bearer ${token}`
-//             }
-//          }
-
-//       );
-
-//     }catch(error){
-//         console.log(error);
-//     }
-
-// }
-
-// const loginpagebtn = document.querySelector("#loginpagebtn");
-
-// loginpagebtn.addEventListener("click", (e) => {
-//   e.preventDefault();
-//   window.location.href = "../login/login.html";
-// });
-// const signbtn = document.querySelector("#signup");

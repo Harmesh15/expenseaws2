@@ -53,3 +53,28 @@ module.exports = sequelize;
 //     console.log(JSON.stringify(error));
 //   }
 // })();
+
+// const Sequelize = require("sequelize");
+
+// const sequelize = new Sequelize(
+//   'expense_tracker',
+//   'root',
+//   'harmesh15',
+//   {
+//     host: 'localhost',
+//     dialect: 'mysql'
+//   }
+// );
+
+
+// (async () => {
+//   try {
+//     await sequelize.authenticate();
+//     console.log("connection completely");
+//   } catch (error) {
+//     console.log(error);
+//   }
+// })();
+
+// module.exports = sequelize;
+

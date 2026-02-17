@@ -10,7 +10,8 @@ const S3services = require('../services/S3services');
 const addExpense = async (req, res) => {
   const t = await sequelize.transaction();
   try {
-    console.log("addexpense hit");
+
+    console.log("addexpense hit", req.user.userId);
 
     const { amount, category, description } = req.body;
 
@@ -23,6 +24,8 @@ const addExpense = async (req, res) => {
     // })
     // const categoryval = response.text;
 
+    console.log(amount, category, description, "from add expense");
+
     const expense = await Expense.create({
       amount: amount,
       category: category,
@@ -30,6 +33,7 @@ const addExpense = async (req, res) => {
       userId: req.user.userId,
     });
 
+    console.log("created");
     const user = await users.findOne({
       where: { id: req.user.userId },
       attributes: ["totalExpense"],
@@ -54,7 +58,6 @@ const addExpense = async (req, res) => {
     res.status(500);
   }
 };
-
 
 const getExpense = async (req, res) => {
   console.log("refresh par chala getExpense");

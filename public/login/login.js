@@ -1,49 +1,33 @@
-const form = document.querySelector("form");
-const email = document.querySelector("#email");
-const password = document.querySelector("#password");
-const signbtn = document.querySelector("#signup");
-const fpassbtn = document.querySelector("#fpswd");
+const form = document.querySelector('form');
+const email = document.querySelector('#email');
+const forgotpassbtn = document.querySelector('#fpswd');
+const password = document.querySelector('#password');
 
 form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+    e.preventDefault();
+    try {
+        let object = {
+            email: email.value,
+            password: password.value
+        }
+        const response = await axios.post("http://localhost:8000/user/login", object)
+        alert("you loging successfully");
+        const token = localStorage.setItem('token', response.data.token)
+        window.location.href = "../Expense.html"
+        console.log(response.data.token);
+    } catch (error) {
+        console.log(error.response.data.message);
+    }
+})
 
-  try {
-    let object = {
-      email: email.value,
-      password: password.value,
-    };
-
-    console.log(object);
-    const response = await axios.post("http://localhost:8000/user/login", object);
-    alert("You are Login now");
-
-    localStorage.setItem("token", response.data.token);
-    window.location.href = "../Expense.html";
-  } catch (error) {
-    console.log(error.message);
-    console.log(error.response.data.message);
-  }
-});
-
-signbtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  window.location.href = "../signup/signup.html";
-});
-
-// forgot Password Api
-
-fpassbtn.addEventListener("click", async () => {
-  console.log("Click on Forgate button");
-  try {
-    const response = await axios.post("http://localhost:8000/password/sendmail",
-      {
-        email: email.value,
-      },
-    );
-    console.log(response);
-    alert("Please check you email to reset your Password");
-  } catch (error) {
-    console.log(error);
-  }
-  //    window.location.href="../forgot/forgot.html";
-});
+forgotpassbtn.addEventListener('click', async () => {
+    try {
+        console.log("Click on Forgate button");
+        const response = await axios.post("http://localhost:8000/password/sendmail", {
+            email: email.value,
+        },)
+        alert("Check you mail to reset password");
+    } catch (err) {
+        console.log(err.message)
+    }
+})
