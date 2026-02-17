@@ -66,7 +66,6 @@ db.sync()
   .then(() => {
     app.listen(PORT, () => {
       console.log(`server is running on port ${PORT}`);
-      console.log("DB_HOST from ENV:", process.env.DB_HOST)
     });
   })
   .catch((error) => {
