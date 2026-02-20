@@ -47,7 +47,7 @@ form.addEventListener("submit", async (e) => {
   }
 
   try {
-    const res = await axios.post("http://localhost:8000/password/savepassword", {
+    const res = await axios.post("/password/savepassword", {
       password: password2,
       requestId: requestId,
     });
