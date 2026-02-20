@@ -10,7 +10,7 @@ form.addEventListener("submit", async (e) => {
             email: email.value,
             password: password.value
         }
-        const response = await axios.post("http://localhost:8000/user/login", object)
+        const response = await axios.post("/user/login", object)
         alert("you loging successfully");
         const token = localStorage.setItem('token', response.data.token)
         window.location.href = "../Expense.html"
@@ -23,7 +23,7 @@ form.addEventListener("submit", async (e) => {
 forgotpassbtn.addEventListener('click', async () => {
     try {
         console.log("Click on Forgate button");
-        const response = await axios.post("http://localhost:8000/password/sendmail", {
+        const response = await axios.post("/password/sendmail", {
             email: email.value,
         },)
         alert("Check you mail to reset password");
