@@ -299,7 +299,7 @@ form.addEventListener("submit", async function (event) {
   event.preventDefault();
   const token = localStorage.getItem("token");
   try {
-    const response = await axios.post("http://localhost:8000/expense/add",
+    const response = await axios.post("/expense/add",
       {
         amount: amount.value,
         category: category.value,
@@ -323,7 +323,7 @@ form.addEventListener("submit", async function (event) {
 const getAllExpenses = async () => {
   try {
     const token = localStorage.getItem("token");
-    const allExpense = await axios.get("http://localhost:8000/expense/getAll", {
+    const allExpense = await axios.get("/expense/getAll", {
       headers: {
         Authorization: `Bearer ${token}`,
       }
@@ -348,7 +348,7 @@ const getAllExpenses = async () => {
 const deleteExpense = async (id) => {
   try {
     const token = localStorage.getItem("token");
-    await axios.delete(`http://localhost:8000/expense/delete/${id}`, {
+    await axios.delete(`/expense/delete/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -379,7 +379,7 @@ showpremuiumbutton.addEventListener("click", async () => {
   try {
     console.log("show premium btn hit");
     const token = localStorage.getItem("token");
-    const response = await axios.get("http://localhost:8000/expense/premiumUser",
+    const response = await axios.get("/expense/premiumUser",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -423,7 +423,7 @@ async function showExpenseBylimit(page) {
   const token = localStorage.getItem("token");
 
   try {
-    const res = await axios.get(`http://localhost:8000/expense/all?page=${currentPage}&limit=${currentLimit}`,
+    const res = await axios.get(`/expense/all?page=${currentPage}&limit=${currentLimit}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -495,7 +495,7 @@ DownloadExpenses.addEventListener('click', async () => {
   const token = localStorage.getItem("token");
   console.log(token);
   try {
-    const response = await axios.get("http://localhost:8000/expense/download",
+    const response = await axios.get("/expense/download",
       {
         headers: {
           Authorization: `Bearer ${token}`,

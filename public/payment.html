@@ -70,7 +70,7 @@
 
             // Fetch payment session ID from backend
             const response = await axios.post(
-              "http://localhost:8000/payment/pay",
+              "/payment/pay",
               {},
               {
                 headers: {
@@ -119,7 +119,7 @@
               console.log(result.paymentDetails.paymentMessage);
 
               console.log("Status wala route call ho gya hai bhaiya");
-              const response = await axios.get(`http://localhost:8000/payment/payment-status/${orderId}`);
+              const response = await axios.get(`/payment/payment-status/${orderId}`);
               const data = response.data;
               alert("Your payment is " + data.orderStatus);
             }
