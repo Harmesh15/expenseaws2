@@ -59,13 +59,12 @@ app.use("/expense", expenseRoute);
 app.use("/password", forgotPassRoute);
 app.use("/payment", paymentRoutes);
 
-
 const PORT = process.env.PORT || 8000;
 
 db.sync()
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`server is running on port ${PORT}`); ``
+      console.log(`server is running on port ${PORT}`);
     });
   })
   .catch((error) => {
