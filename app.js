@@ -60,7 +60,7 @@ app.use("/password", forgotPassRoute);
 app.use("/payment", paymentRoutes);
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 db.sync()
   .then(() => {
