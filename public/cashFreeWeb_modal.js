@@ -10,9 +10,7 @@ document.getElementById("renderBtn").addEventListener("click", async () => {
     let token = localStorage.getItem("token");
 
     // Fetch payment session ID from backend
-    const response = await axios.post(
-      "/pay",
-      {},
+    const response = await axios.post("/pay", {},
       {
         headers: {
           Authorization: `Bearer ${token}`,

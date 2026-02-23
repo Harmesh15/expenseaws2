@@ -26,7 +26,7 @@ forgotpassbtn.addEventListener('click', async () => {
         console.log("Click on Forgate button");
         const response = await axios.post("/password/sendmail", {
             email: email.value,
-        },)
+        })
         alert("Check you mail to reset password");
     } catch (err) {
         console.log(err.message)
