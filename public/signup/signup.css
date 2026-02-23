@@ -31,7 +31,7 @@ body::before, body::after {
     background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
     filter: blur(80px);
     border-radius: 50%;
-    opacity: 0.3;
+    opacity: 0.8;
     z-index: -1;
 }
 

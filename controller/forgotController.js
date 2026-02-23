@@ -126,7 +126,7 @@ const sendmailTouser = async (req, res) => {
     });
 
     console.log(requestid, "reqid");
-    const resetLink = `/forgot/resetpassword.html?requestId=${requestid}`;
+    const resetLink = `${process.env.BASE_URL}/forgot/resetpassword.html?requestId=${requestid}`;
     await api.sendTransacEmail({
       sender: { email: "harmeshmahaur44@gmail.com", name: "ExpenseTracker" },
       to: [{ email }],

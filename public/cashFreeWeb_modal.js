@@ -5,7 +5,6 @@ const cashfree = Cashfree({
 console.log("model m redirect hokar aagyi");
 
 document.getElementById("renderBtn").addEventListener("click", async () => {
-  const token = localStorage.getItem("token");
   try {
     let token = localStorage.getItem("token");
 
