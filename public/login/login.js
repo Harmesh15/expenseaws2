@@ -17,6 +17,7 @@ form.addEventListener("submit", async (e) => {
         console.log(response.data.token);
     } catch (error) {
         console.log(error.response.data.message);
+        alert("something went wrong");
     }
 })
 

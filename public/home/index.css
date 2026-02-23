@@ -20,6 +20,7 @@ body {
 
 .hero-section {
     height: 100vh;
+    width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -42,14 +43,14 @@ body {
     width: 400px;
     height: 400px;
     background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-    filter: blur(80px);
+    filter: blur(75px);
     border-radius: 50%;
-    opacity: 0.4;
-    animation: move 10s infinite alternate;
+    opacity: .8;
+    animation: move 5s infinite alternate;
 }
 
 .blob-1 { top: -100px; left: -100px; }
-.blob-2 { bottom: -100px; right: -100px; animation-delay: 2s; }
+.blob-2 { bottom: -100px; right: -100px; animation-delay: 1s; }
 
 @keyframes move {
     from { transform: translate(0, 0); }
@@ -150,7 +151,6 @@ h1 {
     margin-top: 50px;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
-    padding: 20px 40px;
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     animation: float 4s ease-in-out infinite;

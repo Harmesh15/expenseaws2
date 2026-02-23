@@ -1,277 +1,3 @@
-
-// let form = document.querySelector("form");
-// let amount = document.querySelector("#inputval");
-// let category = document.querySelector("#selectinput");
-// let description = document.querySelector("#descinput");
-// let button = document.querySelector("button");
-
-// const List = document.getElementById("list");
-// const showpremuiumbutton = document.querySelector(".showpremuiumbutton");
-// const buypremiumbtn = document.querySelector(".buyMembership");
-// const ListPremium = document.querySelector("#premiumUSerList");
-// const DownloadExpenses = document.querySelector("#DownloadExpenses");
-
-// const limitSelect = document.getElementById("optionpage");
-// const prevBtn = document.getElementById("prevBtn");
-// const nextBtn = document.getElementById("nextBtn");
-// const pageInfo = document.getElementById("pageInfo");
-
-
-// const ContentList = document.getElementById("contentList")
-
-// let currentPage = 1;
-// let currentLimit = 5;
-
-// form.addEventListener("submit", async function (event) {
-//   event.preventDefault();
-//   console.log("add user controller hit")
-//   const token = localStorage.getItem("token");
-
-//   let obj1 = {
-//     amount: amount.value,
-//     category: category.value,
-//     description: description.value,
-//   }
-
-//   console.log(obj1);
-//   try {
-//     const response = await axios.post("http://localhost:8000/expense/add", obj1,
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         }
-//       },
-//     );
-//     console.log("Expense added");
-//     form.reset();
-//     getAllExpenses();
-//   } catch (error) {
-//     console.log("user not added");
-//     console.log(error.message);
-//   }
-// });
-
-// const getAllExpenses = async () => {
-//   try {
-//     const token = localStorage.getItem("token");
-//     const allExpense = await axios.get("http://localhost:8000/expense/getAll", {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       }
-//     });
-
-//     const Data = allExpense.data;
-//     List.innerHTML = "";
-//     Data.forEach((item) => {
-//       let li = document.createElement("li");
-//       li.innerHTML = ` 
-//                    Rs ${item.amount}  (${item.category})  ${item.description},
-//                    <button id="btn" onclick="deleteExpense(${item.id})">DeleteExpense</button>
-//                 `;
-//       List.appendChild(li);
-//     });
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// };
-
-
-// const deleteExpense = async (id) => {
-//   try {
-//     const token = localStorage.getItem("token");
-//     await axios.delete(`http://localhost:8000/expense/delete/${id}`, {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-//     getAllExpenses();
-//     console.log("Expense deleted");
-//     // showExpenseBylimit(currentPage);
-//   } catch (error) {
-//     alert("Something went wrong");
-//     console.log("Not Authorize to delete other's expenses");
-//     console.log(error);
-//   }
-// };
-
-// window.addEventListener("DOMContentLoaded", () => {
-//   showExpenseBylimit(1);
-// });
-
-
-// // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ premium users @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-
-// buypremiumbtn.addEventListener("click", () => {
-//   window.location.href = "payment.html";
-// });
-
-// showpremuiumbutton.addEventListener("click", async () => {
-//   try {
-//     console.log("show premium btn hit");
-//     const token = localStorage.getItem("token");
-//     const response = await axios.get("http://localhost:8000/expense/premiumUser",
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       },
-//     );
-//     console.log("users Displayed", response.data);
-//     const Data = response.data;
-//     console.log(Data);
-//     ListPremium.innerHTML = "";
-
-//     Data.forEach((item) => {
-//       const li = document.createElement("li");
-//       li.innerHTML = ` ${item.name}   ${item.totalExpense}`;
-//       ListPremium.appendChild(li);
-//     });
-
-//     console.log("users Displayed");
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-// );
-
-
-
-
-// //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ShowUserByLimit and Pagination @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-
-
-// limitSelect.addEventListener("change", function () {
-//   currentLimit = Number(this.value);
-//   currentPage = 1;
-//   showExpenseBylimit(currentPage);
-// });
-
-
-// async function showExpenseBylimit(page) {
-//   currentPage = page;
-//   const token = localStorage.getItem("token");
-
-//   try {
-//     const res = await axios.get(`http://localhost:8000/expense/all?page=${currentPage}&limit=${currentLimit}`,
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         }
-//       },
-//     );
-
-
-//     if (page > res.data.pagination.totalpage && res.data.pagination.totalpage > 0) {
-//       currentPage = res.data.pagination.totalpage;
-//       return showExpenseBylimit(currentPage);
-//     }
-
-
-
-
-//     showExpenseReport(res.data.expenses)
-//     renderPagination(res.data.pagination);
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// }
-
-
-// function showExpenseReport(expenses) {
-//   List.innerHTML = "";
-
-//   expenses.forEach((item) => {
-//     const li = document.createElement("li");
-
-//     li.innerHTML = `
-//       Rs ${item.amount} (${item.category}) ${item.description}
-//       <button id="btn" onclick="deleteExpense(${item.id})">DeleteExpense</button>
-//     `;
-//     List.appendChild(li);
-//   });
-// }
-
-
-// function renderPagination(pagination) {
-//   pageInfo.innerText = "Page " + pagination.currentpage + " of " + pagination.totalpage;
-
-//   prevBtn.style.display = pagination.haspreviouspage ? "inline" : "none";
-//   nextBtn.style.display = pagination.hasnextpage ? "inline" : "none";
-
-//   if (pagination.haspreviouspage) {
-//     prevBtn.onclick = function () {
-//       showExpenseBylimit(pagination.previouspage);
-//     };
-//   }
-
-//   if (pagination.hasnextpage) {
-//     nextBtn.onclick = function () {
-//       showExpenseBylimit(pagination.nextpage);
-//     };
-//   }
-// }
-
-// window.addEventListener("DOMContentLoaded", () => {
-//   showExpenseBylimit(1);
-// });
-
-
-// // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Download and Show URL @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-
-// DownloadExpenses.addEventListener('click', async () => {
-//   console.log("DownloadReport fun hit in js 201")
-//   const token = localStorage.getItem("token");
-
-//   try {
-//     const response = await axios.get("http://localhost:8000/expense/download",
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         }
-//       },
-//     );
-
-//     console.log(response);
-//     const Data = response.data.contentReponse;
-//     console.log(Data);
-//     showContentUrl(Data);
-//     console.log(response.data);
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// })
-
-// function showContentUrl(Data) {
-//   try {
-//     ContentList.innerHTML = "";
-//     Data.forEach((item) => {
-//       const li = document.createElement('li');
-//       li.innerHTML = `<a href="${item.ContentUrl}" target="_blank">Download</a>`;
-//       ContentList.appendChild(li);
-//     })
-//     console.log("successfull");
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 let form = document.querySelector("form");
 let amount = document.querySelector("#inputval");
 let category = document.querySelector("#select");
@@ -355,7 +81,7 @@ const deleteExpense = async (id) => {
     });
     getAllExpenses();
     console.log("Expense deleted");
-    // showExpenseBylimit(currentPage);
+    showExpenseBylimit(currentPage);
   } catch (error) {
     alert("Something went wrong");
     console.log("Not Authorize to delete other's expenses");
@@ -364,7 +90,8 @@ const deleteExpense = async (id) => {
 };
 
 window.addEventListener("DOMContentLoaded", () => {
-  showExpenseBylimit(1);
+
+  showExpenseBylimit(currentPage);
 });
 
 
@@ -431,14 +158,10 @@ async function showExpenseBylimit(page) {
       },
     );
 
-
     if (page > res.data.pagination.totalpage && res.data.pagination.totalpage > 0) {
       currentPage = res.data.pagination.totalpage;
       return showExpenseBylimit(currentPage);
     }
-
-
-
 
     showExpenseReport(res.data.expenses)
     renderPagination(res.data.pagination);
@@ -446,6 +169,7 @@ async function showExpenseBylimit(page) {
     console.log(error.message);
   }
 }
+
 
 
 function showExpenseReport(expenses) {
@@ -482,9 +206,9 @@ function renderPagination(pagination) {
   }
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  showExpenseBylimit(1);
-});
+// window.addEventListener("DOMContentLoaded", () => {
+//   showExpenseBylimit(1);
+// });
 
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Download and Show URL @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -512,13 +236,14 @@ DownloadExpenses.addEventListener('click', async () => {
   }
 })
 
+
 function showContentUrl(Data) {
   try {
-    ContentList.innerHTML = "";
+    premiumUSerList.innerHTML = "";
     Data.forEach((item) => {
       const li = document.createElement('li');
       li.innerHTML = `<a href="${item.ContentUrl}" target="_blank">Download</a>`;
-      ContentList.appendChild(li);
+      premiumUSerList.appendChild(li);
     })
     console.log("successfull");
   } catch (err) {

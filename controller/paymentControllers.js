@@ -69,10 +69,7 @@
 
 
 const path = require("path");
-const {
-  createOrder,
-  getPaymentStatus,
-} = require("../services/cashfreeServices");
+const { createOrder, getPaymentStatus } = require("../services/cashfreeServices");
 const Payment = require("../models/Payment");
 
 exports.getPaymentPage = (req, res) => {
@@ -117,7 +114,6 @@ exports.processPayment = async (req, res) => {
 
 exports.updatePaymentStatus = async (req, res) => {
   const orderId = req.params.orderId;
-
   try {
     const orderStatus = await getPaymentStatus(orderId);
 

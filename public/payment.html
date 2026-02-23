@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -61,17 +61,13 @@
         mode: "sandbox",
       });
 
-      document
-        .getElementById("renderBtn")
-        .addEventListener("click", async () => {
+      document.getElementById("renderBtn").addEventListener("click", async () => {
           try {
             let token = localStorage.getItem("token");
             console.log(token, "token hai ye");
 
             // Fetch payment session ID from backend
-            const response = await axios.post(
-              "/payment/pay",
-              {},
+            const response = await axios.post("/payment/pay",{},
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -82,7 +78,8 @@
             const data = response.data;
             const paymentSessionId = data.paymentSessionId;
             const orderId = data.orderId;
-
+             
+            console.log("yaha tak aagya")
             // Initialize checkout options
             let checkoutOptions = {
               paymentSessionId: paymentSessionId,
@@ -90,19 +87,16 @@
               //? Modal payment options
               redirectTarget: "_modal",
             };
-
+           
+            console.log("yaha tak bhi aagya")
             // Start the checkout process
             const result = await cashfree.checkout(checkoutOptions);
-            console.log(
-              checkoutOptions,
-              "esme sessionId or orderId dono hai object hai ye",
+            console.log(checkoutOptions,"esme sessionId or orderId dono hai object hai ye",
             );
 
             if (result.error) {
               // This will be true whenever user clicks on close icon inside the modal or any error happens during the payment
-              console.log(
-                "User has closed the popup or there is some payment error, Check for Payment Status",
-              );
+              console.log("User has closed the popup or there is some payment error, Check for Payment Status");
               console.log(result.error);
             }
             if (result.redirect) {
