@@ -1,35 +1,3 @@
-// const urlParams = new URLSearchParams(window.location.search);
-// const requestId = urlParams.get("requestId");
-
-// const form = document.querySelector("form");
-
-// form.addEventListener("submit", async (e) => {
-//   e.preventDefault();
-
-//   console.log("click on confirm");
-//   const password1 = document.getElementById("password1").value;
-//   const password2 = document.getElementById("password2").value;
-
-//   if (password1 !== password2) {
-//     alert("Password not matched enter again")
-//     // form.reset();
-//   }
-//   try {
-//     const res = await axios.post("http://localhost:8000/password/savepassword",
-//       {
-//         password2,
-//         requestId,
-//       },
-//     );
-//     alert("Password reset successfully");
-//     console.log(res);
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// });
-
-
-
 const urlParams = new URLSearchParams(window.location.search);
 const requestId = urlParams.get("requestId");
 
