@@ -240,34 +240,6 @@ const getAllExpenseForReport = async (req, res) => {
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Download ,Create_S3Bucket @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-
-// const downloadExpenses = async (req, res) => {
-//   try {
-
-//     console.log("controller hit in download report");
-//     const response = await Expense.findAll({ where: { userId: req.user.userId } });
-
-//     const stringifiedExpense = JSON.stringify(response);
-//     const fileName = `Expense${req.user.userId}.txt`;
-//     const fileUrl = await S3services.uploadToS3(stringifiedExpense, fileName);
-
-//     await content.create({
-//       ContentUrl: fileUrl,
-//       userId: req.user.userId
-//     });
-
-//     const contentReponse = await content.findAll({ where: { userId: req.user.userId } });
-//     res.status(200).json({ contentReponse });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-
-
-
-
-
 const downloadExpenses = async (req, res) => {
   try {
 
