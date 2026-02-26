@@ -50,7 +50,7 @@ document.getElementById("renderBtn").addEventListener("click", async () => {
       console.log("Payment has been completed, Check for Payment Status");
       console.log(result.paymentDetails.paymentMessage);
 
-      const response = await axios.get(`/payment/payment-status/${orderId}`);
+      const response = await axios.get(`${process.env.BASE_URL}/payment/payment-status/${orderId}`);
       console.log("payemenet status is ", response);
       const data = response.data;
       alert("Your payment is " + data.orderStatus);
