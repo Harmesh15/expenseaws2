@@ -27,7 +27,7 @@ forgotpassbtn.addEventListener('click', async () => {
         const response = await axios.post("/password/sendmail", {
             email: email.value,
         })
-        alert("Check you mail to reset password");
+        alert("Reset password mail send");
     } catch (err) {
         console.log(err.message)
     }
