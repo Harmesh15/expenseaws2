@@ -8,7 +8,7 @@ client.authentications["api-key"].apiKey = process.env.BREVO_API;
 const api = new SibApiV3Sdk.TransactionalEmailsApi();
 
 const sendmailTouser = async (req, res) => {
-  console.log("BREVO KEY:", process.env.BREVO_API);
+
 
   console.log("SendMail hit in controller");
   try {
