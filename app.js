@@ -42,9 +42,9 @@ require("./models");
 
 app.use(express.json());
 app.use(cors());
+
 app.use(compression());
 app.use(morgan("combined", { stream: accessLogStream }));
-
 
 app.use(express.static("public"));
 
@@ -70,33 +70,3 @@ db.sync()
   .catch((error) => {
     console.log(error.message);
   });
-
-
-
-// const express = require("express");
-// const db  = require("./utils/db-connection");
-// const userRoute = require("./routes/userRoutes");
-// const cors = require('cors');
-// const app = express();
-
-
-// // models
-// require("./models/expensemodel");
-
-
-// app.use(express.json());
-// app.use(cors());
-// app.use(express.static('public'));
-
-// app.get("/",(req,res)=>{
-//     res.send("hello from the server");
-// })
-
-// app.use("/user",userRoute);
-
-
-// db.sync().then(()=>{
-//     app.listen(3000,()=>{
-//     console.log("server is running");
-// })
-// })
