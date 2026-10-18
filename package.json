@@ -1,6 +1,5 @@
 {
   "name": "expenseapp",
-  "name": "signupform",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -14,7 +13,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.990.0",
     "@cashfreepayments/cashfree-js": "^1.0.5",
-    "@google/genai": "^1.38.0",
+    "@google/genai": "^1.52.0",
     "aws-sdk": "^2.1693.0",
     "bcrypt": "^6.0.0",
     "bootstrap": "^5.3.8",
@@ -27,7 +26,7 @@
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
-    "mysql2": "^3.16.0",
+    "mysql2": "^3.16.1",
     "nodemon": "^3.1.11",
     "path": "^0.12.7",
     "pg": "^8.18.0",
@@ -35,12 +34,6 @@
     "sequelize": "^6.37.7",
     "sequelize-cli": "^6.6.5",
     "sib-api-v3-sdk": "^8.5.0",
-    "uuid": "^13.0.0",
-    "bcrypt": "^6.0.0",
-    "cors": "^2.8.5",
-    "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3",
-    "mysql2": "^3.16.1",
-    "sequelize": "^6.37.7"
+    "uuid": "^13.0.0"
   }
 }

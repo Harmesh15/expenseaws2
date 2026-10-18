@@ -46,7 +46,7 @@ body {
     filter: blur(75px);
     border-radius: 50%;
     opacity: .8;
-    animation: move 5s infinite alternate;
+    animation: move 1s infinite alternate;
 }
 
 .blob-1 { top: -100px; left: -100px; }

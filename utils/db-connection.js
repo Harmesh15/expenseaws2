@@ -1,16 +1,5 @@
 const { Sequelize } = require("sequelize");
 
-// let sequelize
-// if (process.env.DB_URL) {
-//   // Render / Production (Postgres)
-//   sequelize = new Sequelize(process.env.DB_URL, {
-//     dialect: "postgres",
-//     protocol: "postgres",
-//     logging: false, // optional, logs band
-//   });
-// } else {
-// Local (Postgres)
-
 let sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -36,8 +25,6 @@ module.exports = sequelize;
 
 
 
-
-
 // const sequelize = new Sequelize("expensetracker", "root", "harmesh15", {
 //   host: "localhost",
 //   dialect: "mysql",
@@ -53,6 +40,9 @@ module.exports = sequelize;
 //     console.log(JSON.stringify(error));
 //   }
 // })();
+
+
+
 
 // const Sequelize = require("sequelize");
 

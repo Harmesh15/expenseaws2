@@ -27,3 +27,17 @@ const expense = sequelize.define("expense", {
 });
 
 module.exports = expense;
+
+
+// const mongoose = require("mongoose");
+// const expenseSchema = new mongoose.Schema({
+//     amount: {
+//         type: Number,
+//         required: true,
+//     },
+//     userId: {
+//         type: mongoose.Schema.types.ObjectId,
+//         'ref': users
+//     }
+// });
+

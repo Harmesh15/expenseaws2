@@ -5,59 +5,85 @@ const content = require("../models/ContentUploded");
 const sequelize = require("../utils/db-connection");
 const S3services = require('../services/S3services');
 
+const { GoogleGenAI } = require('@google/genai');
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Expense@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-const addExpense = async (req, res) => {
-  const t = await sequelize.transaction();
+const suggestCategory = async (req, res) => {
   try {
+    const { descriptionVal } = req.body;
 
-    console.log("addexpense hit", req.user.userId);
+    if (!descriptionVal || descriptionVal.trim() === '') {
+      return res.status(400).json({ message: "Description is required" });
+    }
 
-    const { amount, category, description } = req.body;
-
-    // AI Integration
-    // const ai = new GeminiApi.GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
-    // const response = await ai.models.generateContent({
-    //     "model": "gemini-3-flash-preview",
-    //     "contents": `one category for this expense = " ${description}"`
-    // })
-    // const categoryval = response.text;
-
-    console.log(amount, category, description, "from add expense");
-
-    const expense = await Expense.create({
-      amount: amount,
-      category: category,
-      description: description,
-      userId: req.user.userId,
+    console.log(" suggestCategory controller hit", "description ", descriptionVal);
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.8-flash',
+      contents: `Categorize this expense description into a single concise category name (e.g., Food, Travel, Shopping, Bills, Entertainment): "${descriptionVal}". Return only the category word.`
     });
 
-    console.log("created");
-    const user = await users.findOne({
-      where: { id: req.user.userId },
-      attributes: ["totalExpense"],
-    });
+    console.log("response of AI", response);
+    const suggestedCategory = response.text ? response.text.trim() : 'General';
 
-    const totalExpense = +user.totalExpense;
-    const amountval = Number(amount);
+    console.log(suggestedCategory, "ye hai output");
 
-    await users.update(
-      { totalExpense: totalExpense + amountval },
-      {
-        where: { id: req.user.userId },
-        transaction: t,
-      },
-    );
-
-    await t.commit();
-    res.status(201).json(expense);
-  } catch (error) {
-    if (t) await t.rollback();
-    console.log(error.message);
-    res.status(500);
+    return res.status(200).json({ category: suggestedCategory });
+  } catch (err) {
+    // return res.status(500).json({ message: "Failed to generate category", error: err.message });
+    console.error("Server Error in suggestCategory:", err);
+    return res.status(500).json({ message: "Internal server error", category: "General" });
   }
 };
+
+
+
+
+const addExpense = async (req, res) => {
+  // const t = await sequelize.transaction();
+  console.log("add controller hit");
+  try {
+
+    const { amount, category, description } = req.body
+    console.log(amount, category, description);
+
+    //  const aiResult = await categorizeExpense(description);
+    //  console.log(aiResult);
+    //  const Genratecategory = aiResult.category
+    //  console.log(Genratecategory);
+
+    //  if(!amount || !category || !description){
+    //     alert("Please Fill all fields")
+    //     return;
+    //  }
+
+    const expense = await Expense.create({
+      amount,
+      category: category || 'General',
+      description,
+      userId: req.user.userId
+    });
+
+    const user = await users.findById(req.user.userId);
+
+    await users.findByIdAndUpdate(
+      req.user.userId,
+      {
+        $inc: { totalExpense: Number(amount) }
+      }
+    );
+    // await t.commit();
+    res.status(201).json({ message: "Expense added" });
+
+  } catch (err) {
+    // if (t) await t.rollback();
+    res.status(500).json({ message: "expense not added" }, err)
+  }
+
+}
+
+
+
 
 const getExpense = async (req, res) => {
   console.log("refresh par chala getExpense");
@@ -93,6 +119,7 @@ const deleteExpense = async (req, res) => {
         transaction: t,
       },
     );
+
     // throw new Error("force rollback");
 
     const deleteExpense = await Expense.destroy({
@@ -140,6 +167,10 @@ const updateTotalExpenseAmount = async (req, res, id) => {
     console.log(err, "Update value totalExpense");
   }
 };
+
+
+
+
 
 const updateExpense = async (req, res) => {
   let t = await sequelize.transaction();
@@ -276,6 +307,7 @@ const downloadExpenses = async (req, res) => {
 
 module.exports = {
   addExpense,
+  suggestCategory,
   deleteExpense,
   getExpense,
   updateExpense,

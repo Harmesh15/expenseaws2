@@ -23,22 +23,9 @@ const accessLogStream = fs.createWriteStream(
 const app = express();
 const cors = require("cors");
 
-// models
+
 require("./models");
-// app.use(
-//   helmet({
-//     contentSecurityPolicy: {
-//       useDefaults: false,
-//       directives: {
-//         defaultSrc: ["'self'"],
-//         scriptSrc: ["'self'"],
-//         connectSrc: ["'self'", "http://localhost:8000"],
-//         imgSrc: ["'self'", "data:"],
-//         styleSrc: ["'self'", "'unsafe-inline'"],
-//       },
-//     },
-//   })
-// );
+
 
 app.use(express.json());
 app.use(cors());
@@ -52,6 +39,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'home', 'index.html'));
 
 });
+
 
 // routes
 app.use("/user", userRoutes);

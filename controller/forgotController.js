@@ -4,11 +4,10 @@ const users = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const forgotpassword = require("../models/ForgotPassworModel");
 const client = SibApiV3Sdk.ApiClient.instance;
-client.authentications["api-key"].apiKey = process.env.BREVO_API;
+client.authentications["api-key"].apiKey = process.env.BREVO_API_K;
 const api = new SibApiV3Sdk.TransactionalEmailsApi();
 
 const sendmailTouser = async (req, res) => {
-
 
   console.log("SendMail hit in controller");
   try {

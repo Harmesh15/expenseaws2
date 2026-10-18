@@ -197,6 +197,16 @@ li {
 }
 
 
+#logoutBtn {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    padding: 10px 18px;
+    background: #ef4444;
+    color: white;
+}
 
-
-
+#logoutBtn:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+}

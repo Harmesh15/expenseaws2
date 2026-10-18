@@ -1,6 +1,6 @@
 let form = document.querySelector("form");
 let amount = document.querySelector("#inputval");
-let category = document.querySelector("#select");
+let categoryInput = document.querySelector("#categoryId");
 let description = document.querySelector("#descinput");
 let button = document.querySelector("button");
 
@@ -9,6 +9,7 @@ const showpremuiumbutton = document.querySelector(".showpremuiumbutton");
 const buypremiumbtn = document.querySelector(".buyMembership");
 const ListPremium = document.querySelector("#premiumUSerList");
 const DownloadExpenses = document.querySelector("#DownloadExpenses");
+const logoutBtn = document.getElementById("logoutBtn");
 
 const limitSelect = document.getElementById("optionpage");
 const prevBtn = document.getElementById("prevBtn");
@@ -20,6 +21,32 @@ const ContentList = document.getElementById("contentList")
 
 let currentPage = 1;
 let currentLimit = 5;
+let timer;
+description.addEventListener('input', () => {
+  clearTimeout(timer);
+
+  const descriptionVal = description.value.trim();
+  if (descriptionVal.length < 3) return;
+
+  timer = setTimeout(async () => {
+    categoryInput.value = "Generating...";
+
+    try {
+      const res = await axios.post('/expense/suggest-category', { descriptionVal })
+      console.log("res ki value", res);
+      const data = res.data.category;
+      console.log("category ki", data);
+      categoryInput.value = data;
+    } catch (err) {
+      categoryInput.value = "General";
+    }
+  }, 1000);
+});
+
+
+
+
+
 
 form.addEventListener("submit", async function (event) {
   event.preventDefault();
@@ -28,7 +55,7 @@ form.addEventListener("submit", async function (event) {
     const response = await axios.post("/expense/add",
       {
         amount: amount.value,
-        category: category.value,
+        category: categoryInput.value,
         description: description.value,
       },
       {
@@ -45,6 +72,18 @@ form.addEventListener("submit", async function (event) {
     console.log(error);
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
 
 const getAllExpenses = async () => {
   try {
@@ -92,6 +131,7 @@ const deleteExpense = async (id) => {
 window.addEventListener("DOMContentLoaded", () => {
 
   showExpenseBylimit(currentPage);
+
 });
 
 
@@ -211,7 +251,7 @@ function renderPagination(pagination) {
 // });
 
 
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Download and Show URL @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Download Report and Show URL @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
 DownloadExpenses.addEventListener('click', async () => {
@@ -253,16 +293,10 @@ function showContentUrl(Data) {
 
 
 
+logoutBtn.addEventListener("click", () => {
+  localStorage.removeItem("token");
 
+  alert("Logout successful");
 
-
-
-
-
-
-
-
-
-
-
-
+  window.location.href = "../login/login.html";
+});

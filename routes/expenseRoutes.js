@@ -4,6 +4,7 @@ const expenseController = require("../controller/expenseController");
 const authorizationToken = require("../middleware/auth");
 
 // expense routes
+route.post('/suggest-category', expenseController.suggestCategory);
 route.post("/add", authorizationToken, expenseController.addExpense);
 
 route.delete("/delete/:id", authorizationToken, expenseController.deleteExpense);

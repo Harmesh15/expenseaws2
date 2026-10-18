@@ -27,6 +27,8 @@ const addUser = async (req, res) => {
   }
 };
 
+
+
 const loginUser = async (req, res) => {
   console.log("login controller hit");
   try {
