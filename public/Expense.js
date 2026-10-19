@@ -22,6 +22,7 @@ const ContentList = document.getElementById("contentList")
 let currentPage = 1;
 let currentLimit = 5;
 let timer;
+
 description.addEventListener('input', () => {
   clearTimeout(timer);
 
@@ -254,43 +255,94 @@ function renderPagination(pagination) {
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Download Report and Show URL @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
-DownloadExpenses.addEventListener('click', async () => {
-  console.log("DownloadReport fun hit in js 201")
-  const token = localStorage.getItem("token");
-  console.log(token);
+
+
+DownloadExpenses.addEventListener("click", async () => {
+
   try {
     const response = await axios.get("/expense/download",
       {
         headers: {
-          Authorization: `Bearer ${token}`,
-        }
-      },
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
     );
 
-    const Data = response.data.contentReponse;
-    console.log(Data);
-    showContentUrl(Data);
-    console.log(response.data);
+    const { downloadUrl, fileName, message } = response.data;
+
+    if (!downloadUrl) {
+      throw new Error("Download URL was not received");
+    }
+
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = fileName || "my-expenses.json";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    alert("Success! Your expenses file is downloading.");
   } catch (error) {
-    console.log(error.message);
+    console.error(error);
+
+    alert(
+      error.response?.data?.message ||
+      "Expense download failed. Please try again."
+    );
   }
+
 })
 
 
-function showContentUrl(Data) {
-  try {
-    premiumUSerList.innerHTML = "";
-    Data.forEach((item) => {
-      const li = document.createElement('li');
-      li.innerHTML = `<a href="${item.ContentUrl}" target="_blank">Download</a>`;
-      premiumUSerList.appendChild(li);
-    })
-    console.log("successfull");
-  } catch (err) {
-    console.log(err);
-  }
-}
 
+
+
+
+// DownloadExpenses.addEventListener('click', async () => {
+//   console.log("DownloadReport fun hit in js 201")
+//   const token = localStorage.getItem("token");
+//   console.log(token);
+//   try {
+//     const response = await axios.get("/expense/download",
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         }
+//       },
+//     );
+
+//     console.log(response.data);
+//     showContentUrl(response.data.contentResponse);
+//     // const Data = response.data.contentReponse;
+//     // console.log(Data);
+//     // showContentUrl(Data);
+//     // console.log(response.data);
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// })
+
+
+
+
+
+
+
+
+
+
+
+
+function showContentUrl(contentResponse) {
+  if (!Array.isArray(contentResponse)) {
+    console.error("Invalid content response:", contentResponse);
+    return;
+  }
+
+  contentResponse.forEach((item) => {
+    console.log(item.ContentKey);
+  });
+}
 
 
 logoutBtn.addEventListener("click", () => {

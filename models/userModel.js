@@ -1,3 +1,4 @@
+
 const sequelize = require("../utils/db-connection");
 const { DataTypes } = require("sequelize");
 
@@ -27,6 +28,12 @@ const users = sequelize.define("user", {
     validate: {
       min: 0,
     },
+  },
+
+  userRole: {
+    type: DataTypes.ENUM("normal", "premium"),
+    allowNull: false,
+    defaultValue: "normal",
   },
 });
 

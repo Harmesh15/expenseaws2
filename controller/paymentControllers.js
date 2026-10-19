@@ -1,6 +1,7 @@
 const path = require("path");
 const { createOrder, getPaymentStatus } = require("../services/cashfreeServices");
 const Payment = require("../models/Payment");
+const users = require("../models/userModel");
 
 exports.getPaymentPage = (req, res) => {
   res.sendFile(path.join(__dirname, "../views/index.html"));
@@ -44,22 +45,50 @@ exports.processPayment = async (req, res) => {
 };
 
 
+// file path verify kar lena
+
 exports.updatePaymentStatus = async (req, res) => {
   const orderId = req.params.orderId;
+
   try {
+    // 1. Cashfree se actual payment status check karo
     const orderStatus = await getPaymentStatus(orderId);
 
-    // Update payment status in the database
-    const order = await Payment.update(
-      { paymentStatus: orderStatus },
-      { where: { orderId: orderId } },
-    );
+    // 2. Apna payment record find karo
+    const payment = await Payment.findOne({
+      where: { orderId: orderId },
+    });
 
-    console.log(order);
+    if (!payment) {
+      return res.status(404).json({
+        message: "Payment record not found",
+      });
+    }
 
-    res.json({ orderStatus });
+    // 3. Payment status update karo
+    payment.paymentStatus = orderStatus;
+    await payment.save();
+
+    // 4. Sirf successful payment par user ko premium banao
+    if (orderStatus === "Success") {
+      await users.update(
+        { userRole: "premium" },
+        { where: { id: payment.userId } }
+      );
+    }
+
+    return res.json({
+      orderStatus,
+      message:
+        orderStatus === "SUCCESS"
+          ? "Payment successful. User is now premium."
+          : "Payment status updated.",
+    });
   } catch (error) {
     console.error("Error fetching payment status:", error.message);
-    res.status(500).json({ message: "Error fetching payment status" });
+
+    return res.status(500).json({
+      message: "Error fetching payment status",
+    });
   }
 };

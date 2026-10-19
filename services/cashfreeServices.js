@@ -73,5 +73,6 @@ exports.getPaymentStatus = async (orderId) => {
     return orderStatus;
   } catch (error) {
     console.error("Error fetching order status:", error.message);
+    throw error;
   }
 };

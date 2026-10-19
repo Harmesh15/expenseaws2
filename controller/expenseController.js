@@ -56,8 +56,6 @@ const addExpense = async (req, res) => {
 
     console.log(expense);
 
-
-
     const user = await users.findByPk(req.user.userId);
 
     if (!user) {
@@ -110,6 +108,7 @@ const deleteExpense = async (req, res) => {
       where: { id: expenseId },
       transaction: t,
     });
+
 
     await users.increment(
       { totalExpense: -decreaseExpAmount.amount },
@@ -264,41 +263,83 @@ const getAllExpenseForReport = async (req, res) => {
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Download ,Create_S3Bucket @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+
+const { GetObjectCommand } = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const { S3Client } = require("@aws-sdk/client-s3");
+
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION || "ap-south-1",
+});
+
 const downloadExpenses = async (req, res) => {
   try {
-
     console.log("Controller hit: download report");
 
+    const user = await users.findByPk(req.user.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.userRole !== "premium") {
+      return res.status(403).json({
+        message: "Expense download is available for premium users only",
+      });
+    }
+
     const expenses = await Expense.findAll({
-      where: { userId: req.user.userId }
+      where: { userId: req.user.userId },
     });
 
-    if (!expenses || expenses.length === 0) {
+    if (!expenses.length) {
       return res.status(404).json({ message: "No expenses found" });
     }
 
     const stringifiedExpense = JSON.stringify(expenses, null, 2);
+    const fileName =
+      `expenses/user-${req.user.userId}/${Date.now()}.json`;
 
-    const fileName = `expenses/user-${req.user.userId}/${Date.now()}.json`;
-    const fileUrl = await S3services.uploadToS3(
+    await S3services.uploadToS3(
       stringifiedExpense,
       fileName,
       "application/json"
     );
 
     await content.create({
-      ContentUrl: fileUrl,
-      userId: req.user.userId
+      ContentKey: fileName,
+      userId: req.user.userId,
     });
 
-    const contentReponse = await content.findAll({ where: { userId: req.user.userId } });
-    res.status(200).json({ contentReponse });
+    const downloadUrl = await getSignedUrl(
+      s3Client,
+      new GetObjectCommand({
+        Bucket: process.env.BUCKET_NAME,
+        Key: fileName,
+        ResponseContentDisposition:
+          'attachment; filename="my-expenses.json"',
+        ResponseContentType: "application/json",
+      }),
+      { expiresIn: 300 }
+    );
 
+    return res.status(200).json({
+      message: "Expense file is ready to download",
+      downloadUrl,
+      fileName: "my-expenses.json",
+    });
   } catch (error) {
     console.error("Download Expense Error:", error);
-    res.status(500).json({ message: "Something went wrong" });
+
+    return res.status(500).json({
+      message: "Unable to download expenses",
+    });
   }
 };
+
+
+
+
 
 
 module.exports = {
