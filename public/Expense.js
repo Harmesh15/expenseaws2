@@ -69,7 +69,7 @@ form.addEventListener("submit", async function (event) {
     getAllExpenses();
   } catch (error) {
     console.log("user not added");
-    console.log(error);
+    console.log(error.message);
   }
 });
 

@@ -17,13 +17,13 @@ const suggestCategory = async (req, res) => {
       return res.status(400).json({ message: "Description is required" });
     }
 
-    console.log(" suggestCategory controller hit", "description ", descriptionVal);
+
     const response = await ai.models.generateContent({
       model: 'gemini-3.8-flash',
       contents: `Categorize this expense description into a single concise category name (e.g., Food, Travel, Shopping, Bills, Entertainment): "${descriptionVal}". Return only the category word.`
     });
 
-    console.log("response of AI", response);
+
     const suggestedCategory = response.text ? response.text.trim() : 'General';
 
     console.log(suggestedCategory, "ye hai output");
@@ -45,17 +45,7 @@ const addExpense = async (req, res) => {
   try {
 
     const { amount, category, description } = req.body
-    console.log(amount, category, description);
-
-    //  const aiResult = await categorizeExpense(description);
-    //  console.log(aiResult);
-    //  const Genratecategory = aiResult.category
-    //  console.log(Genratecategory);
-
-    //  if(!amount || !category || !description){
-    //     alert("Please Fill all fields")
-    //     return;
-    //  }
+    console.log(amount, category, description, req.user.userId);
 
     const expense = await Expense.create({
       amount,
@@ -64,20 +54,30 @@ const addExpense = async (req, res) => {
       userId: req.user.userId
     });
 
-    const user = await users.findById(req.user.userId);
+    console.log(expense);
 
-    await users.findByIdAndUpdate(
-      req.user.userId,
-      {
-        $inc: { totalExpense: Number(amount) }
-      }
-    );
+
+
+    const user = await users.findByPk(req.user.userId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    await user.increment("totalExpense", {
+      by: Number(amount)
+    });
+
+    getExpense();
     // await t.commit();
     res.status(201).json({ message: "Expense added" });
 
   } catch (err) {
-    // if (t) await t.rollback();
-    res.status(500).json({ message: "expense not added" }, err)
+    console.error("ADD EXPENSE ERROR:", err);
+    res.status(500).json({
+      message: "Expense not added",
+      error: err.message
+    });
   }
 
 }
@@ -92,7 +92,6 @@ const getExpense = async (req, res) => {
       where: { userId: req.user.userId },
     });
 
-    console.log(getExpense);
     res.status(200).json(expense);
   } catch (error) {
     console.log(error.message);
@@ -154,13 +153,11 @@ const updateTotalExpenseAmount = async (req, res, id) => {
       attributes: ["amount"],
       where: { id: expesneId },
     });
-    console.log(response, "response from update delete amount response");
 
     const totalExpenseAmount = await users.findOne({
       attributes: ["totalExpense"],
       where: { id: req.user.userId },
     });
-    console.log(totalExpenseAmount, "totalExpense value controller");
 
     console.log("Expense Value Updated");
   } catch (err) {
@@ -202,7 +199,7 @@ const updateExpense = async (req, res) => {
     await t.commit();
   } catch (error) {
     await t.rollback();
-    console.log(error);
+    console.log(error.message);
     res.status(500).json({ message: "value not updated server error" });
   }
 };
@@ -217,7 +214,6 @@ const premiumUserFunction = async (req, res) => {
       order: [["totalExpense", "DESC"]],
     });
 
-    console.log(response);
     res.status(200).json(response);
   } catch (error) {
     console.log(error.original);
@@ -247,7 +243,7 @@ const getAllExpenseForReport = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
 
-    console.log(expenses, "from controllers");
+
     const totalpage = Math.ceil(totalexpenses / limit);
 
     res.status(200).json({
