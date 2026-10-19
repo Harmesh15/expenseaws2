@@ -5,6 +5,7 @@ const Payment = require("../models/Payment");
 exports.getPaymentPage = (req, res) => {
   res.sendFile(path.join(__dirname, "../views/index.html"));
 };
+
 exports.processPayment = async (req, res) => {
   console.log("User Id is ", req.user.userId);
   const orderId = "ORDER-" + Date.now();
@@ -41,6 +42,7 @@ exports.processPayment = async (req, res) => {
     res.status(500).json({ message: "Error processing payment" });
   }
 };
+
 
 exports.updatePaymentStatus = async (req, res) => {
   const orderId = req.params.orderId;
